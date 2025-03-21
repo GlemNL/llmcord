@@ -3,9 +3,9 @@ import asyncio
 import logging
 import os
 
-from config import Config
-from discord_client import LLMCordClient
-from database import Database  # Import the Database module
+from config.config import Config
+from app.discord_client import LLMCordClient
+from app.database import Database  # Import the Database module
 
 async def main():
     """Main entry point for the LLMCord bot."""
@@ -16,7 +16,7 @@ async def main():
     )
     
     # Load configuration
-    config_path = os.environ.get("CONFIG_PATH", "config.yaml")
+    config_path = os.environ.get("CONFIG_PATH", "config/config.yaml")
     config = Config(config_path)
     
     if not config.bot_token:

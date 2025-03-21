@@ -8,7 +8,7 @@ class Database:
     Handles storage and retrieval of message history for the bot.
     Uses SQLite for persistence.
     """
-    def __init__(self, db_path: str = "message_history.db"):
+    def __init__(self, db_path: str = "data/message_history.db"):
         self.db_path = db_path
         self._create_tables()
         

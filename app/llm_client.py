@@ -4,7 +4,7 @@ from typing import List, Dict, Any, AsyncGenerator, Tuple, Optional
 
 from openai import AsyncOpenAI
 
-from config import Config
+from config.config import Config
 
 
 class LLMClient:

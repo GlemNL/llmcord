@@ -6,12 +6,12 @@ from typing import List, Dict, Any, Optional, Tuple
 import discord
 import httpx
 
-from config import Config
-from llm_client import LLMClient
-from message_store import MessageStore
-from database import Database  # Import the new database module
-from models import MsgNode, ConversationWarnings
-from utils import (
+from config.config import Config
+from app.llm_client import LLMClient
+from app.message_store import MessageStore
+from app.database import Database  # Import the new database module
+from app.models import MsgNode, ConversationWarnings
+from app.utils import (
     extract_message_content, 
     find_parent_message,
     check_permissions, 
@@ -82,6 +82,15 @@ class LLMCordClient(discord.Client):
                 await message.reply("There was an error resetting your conversation history.")
             return
             
+        # Check for stats command
+        if "stats" in message.content and self.user.mentioned_in(message):
+            stats = self.db.get_user_stats(message.author.id)
+            if stats:
+                await message.reply(stats)
+            else:
+                await message.reply(stats)
+            return
+        
         # Process the message chain and generate a response
         await self.process_message_chain(message)
         

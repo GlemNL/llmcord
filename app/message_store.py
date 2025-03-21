@@ -3,8 +3,8 @@ from typing import Dict, Optional
 
 import discord
 
-from models import MsgNode
-from config import Config
+from app.models import MsgNode
+from config.config import Config
 
 
 class MessageStore:
@@ -45,7 +45,7 @@ class MessageStore:
         Build a chain of messages starting from the given message.
         Returns the messages and any user warnings.
         """
-        from models import ConversationWarnings
+        from app.models import ConversationWarnings
         
         messages = []
         warnings = ConversationWarnings()
