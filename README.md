@@ -1,118 +1,131 @@
-<h1 align="center">
-  llmcord
-</h1>
+# 🤖 LLMcord
 
-<h3 align="center"><i>
-  Talk to LLMs with your friends!
-</i></h3>
+> **Transform Discord into a collaborative AI playground**
 
-<p align="center">
-  <img src="https://github.com/jakobdylanc/llmcord/assets/38699060/789d49fe-ef5c-470e-b60e-48ac03057443" alt="">
-</p>
+LLMcord enables seamless interactions with Large Language Models directly in your Discord server. Compatible with virtually any LLM, whether cloud-based or self-hosted.
 
-llmcord transforms Discord into a collaborative LLM frontend. It works with practically any LLM, remote or locally hosted.
+![LLMcord Banner](https://github.com/jakobdylanc/llmcord/assets/38699060/789d49fe-ef5c-470e-b60e-48ac03057443)
 
-## Features
+## ✨ Key Capabilities
 
-### Reply-based chat system
-Just @ the bot to start a conversation and reply to continue. Build conversations with reply chains!
+### Dynamic Conversation System
+Interact naturally with AI models through Discord:
+- Mention the bot to initiate a conversation
+- Continue by replying to messages
+- Type `@bot reset` to start fresh
+- Check your usage with `@bot stats`
 
-You can:
-- Branch conversations endlessly
-- Continue other people's conversations
-- @ the bot while replying to ANY message to include it in the conversation
+### Flexible Conversation Flow
+- Create multiple conversation branches
+- Join and continue conversations started by others
+- Include any message in context by mentioning the bot while replying
 
-Additionally:
-- When DMing the bot, conversations continue automatically (no reply required). To start a fresh conversation, just @ the bot. You can still reply to continue from anywhere.
-- You can branch conversations into [threads](https://support.discord.com/hc/en-us/articles/4403205878423-Threads-FAQ). Just create a thread from any message and @ the bot inside to continue.
-- Back-to-back messages from the same user are automatically chained together. Just reply to the latest one and the bot will see all of them.
+### Additional Interaction Options
+- In DMs: Conversations flow automatically without replies
+- Thread support: Start a thread from any message and mention the bot to continue there
+- Message chaining: Sequential messages from the same user are automatically grouped
 
-### Choose any LLM
-llmcord supports remote models from:
-- [OpenAI API](https://platform.openai.com/docs/models)
-- [xAI API](https://docs.x.ai/docs/models)
-- [Mistral API](https://docs.mistral.ai/getting-started/models/models_overview)
-- [Groq API](https://console.groq.com/docs/models)
-- [OpenRouter API](https://openrouter.ai/models)
+### LLM Provider Flexibility
 
-Or run a local model with:
-- [Ollama](https://ollama.com)
-- [LM Studio](https://lmstudio.ai)
-- [vLLM](https://github.com/vllm-project/vllm)
+**Cloud-based options:**
+- OpenAI API
+- xAI API
+- Mistral API
+- Groq API
+- OpenRouter API
 
-...Or use any other OpenAI compatible API server.
+**Self-hosted options:**
+- Ollama
+- LM Studio
+- vLLM
 
-### And more:
-- Supports image attachments when using a vision model (like gpt-4o, claude-3, llava, etc.)
-- Supports text file attachments (.txt, .py, .c, etc.)
-- Customizable personality (aka system prompt)
-- User identity aware (OpenAI API and xAI API only)
-- Streamed responses (turns green when complete, automatically splits into separate messages when too long)
-- Hot reloading config (you can change settings without restarting the bot)
-- Displays helpful warnings when appropriate (like "⚠️ Only using last 25 messages" when the customizable message limit is exceeded)
-- Caches message data in a size-managed (no memory leaks) and mutex-protected (no race conditions) global dictionary to maximize efficiency and minimize Discord API calls
-- Fully asynchronous
-- 1 Python file, ~200 lines of code
+Or any OpenAI-compatible API server of your choice.
 
-## Instructions
+### Advanced Features
+- Persistent conversation storage in SQLite
+- Image attachment support with vision-capable models
+- Text file attachment handling
+- Customizable AI personality
+- User identity recognition (OpenAI and xAI APIs)
+- Real-time response streaming
+- Runtime configuration updates
+- Smart warning system
+- Efficient message caching
+- Fully asynchronous operation
 
-1. Clone the repo:
+## 📁 Repository Structure
+
+```
+llmcord/
+├── app/                    # Core application code
+├── config/                 # Configuration files
+├── data/                   # Data storage
+├── scripts/                # Utility scripts
+├── docker-compose.yaml
+├── Dockerfile
+├── main.py                 # Entry point
+└── requirements.txt
+```
+
+## 🚀 Setup Guide
+
+1. Get the code:
    ```bash
-   git clone https://github.com/jakobdylanc/llmcord
+   git clone https://github.com/GlemNL/llmcord
    ```
 
-2. Create a copy of "config-example.yaml" named "config.yaml" and set it up:
+2. Create your configuration file:
+   - Copy "config-example.yaml" to "config.yaml"
+   - Configure the following sections:
 
-### Discord settings:
+### Discord Configuration
 
-| Setting | Description |
+| Parameter | Details |
 | --- | --- |
-| **bot_token** | Create a new Discord bot at [discord.com/developers/applications](https://discord.com/developers/applications) and generate a token under the "Bot" tab. Also enable "MESSAGE CONTENT INTENT". |
-| **client_id** | Found under the "OAuth2" tab of the Discord bot you just made. |
-| **status_message** | Set a custom message that displays on the bot's Discord profile. **Max 128 characters.** |
-| **max_text** | The maximum amount of text allowed in a single message, including text from file attachments.<br />(Default: `100,000`) |
-| **max_images** | The maximum number of image attachments allowed in a single message. **Only applicable when using a vision model.**<br />(Default: `5`) |
-| **max_messages** | The maximum number of messages allowed in a reply chain. When exceeded, the oldest messages are dropped.<br />(Default: `25`) |
-| **use_plain_responses** | When set to `true` the bot will use plaintext responses instead of embeds. Plaintext responses have a shorter character limit so the bot's messages may split more often. **Also disables streamed responses and warning messages.**<br />(Default: `false`) |
-| **allow_dms** | Set to `false` to disable direct message access.<br />(Default: `true`) |
-| **permissions** | Configure permissions for `users`, `roles` and `channels`, each with a list of `allowed_ids` and `blocked_ids`. **Leave `allowed_ids` empty to allow ALL. Role and channel permissions do not affect DMs. You can use [category](https://support.discord.com/hc/en-us/articles/115001580171-Channel-Categories-101) IDs to control grouped channel permissions.** |
+| **bot_token** | Generate at [discord.com/developers/applications](https://discord.com/developers/applications) (enable "MESSAGE CONTENT INTENT") |
+| **client_id** | Found in "OAuth2" tab |
+| **status_message** | Custom bot status (max 128 characters) |
+| **max_text** | Maximum text length per message (default: 100,000) |
+| **max_images** | Maximum images per message (default: 5) |
+| **max_messages** | Maximum messages per conversation (default: 25) |
+| **use_plain_responses** | Use plaintext instead of embeds (default: false) |
+| **allow_dms** | Enable/disable direct messages (default: true) |
+| **permissions** | Control access for users, roles, and channels |
 
-### LLM settings:
+### LLM Configuration
 
-| Setting | Description |
+| Parameter | Details |
 | --- | --- |
-| **providers** | Add the LLM providers you want to use, each with a `base_url` and optional `api_key` entry. Popular providers (`openai`, `ollama`, etc.) are already included. **Only supports OpenAI compatible APIs.** |
-| **model** | Set to `<provider name>/<model name>`, e.g:<br /><br />-`openai/gpt-4o`<br />-`ollama/llama3.3`<br />-`openrouter/anthropic/claude-3.7-sonnet` |
-| **extra_api_parameters** | Extra API parameters for your LLM. Add more entries as needed. **Refer to your provider's documentation for supported API parameters.**<br />(Default: `max_tokens=4096, temperature=1.0`) |
-| **system_prompt** | Write anything you want to customize the bot's behavior! **Leave blank for no system prompt.** |
+| **providers** | API endpoints and keys for LLM providers |
+| **model** | Format: `<provider>/<model>` (e.g., `openai/gpt-4o`, `ollama/llama3.3`) |
+| **extra_api_parameters** | Additional LLM parameters (default: max_tokens=4096, temperature=1.0) |
+| **system_prompt** | Customize bot behavior (leave empty for default) |
 
-3. Run the bot:
+3. Launch the bot:
 
-   **No Docker:**
+   **Standard method:**
    ```bash
    python -m pip install -U -r requirements.txt
-   python llmcord.py
+   python main.py
    ```
 
-   **With Docker:**
+   **Docker method:**
    ```bash
+   # Create persistent storage
+   mkdir -p data
+   
+   # Start with Docker Compose
    docker compose up
    ```
 
-## Notes
+## 🔧 Bot Commands
 
-- If you're having issues, try my suggestions [here](https://github.com/jakobdylanc/llmcord/issues/19)
+- `@bot reset` - Clear conversation history
+- `@bot stats` - View usage statistics
+- `@bot help` - Display command information
 
-- Only models from OpenAI API and xAI API are "user identity aware" because only they support the "name" parameter in the message object. Hopefully more providers support this in the future.
+## 📝 Additional Notes
 
-- PRs are welcome :)
-
-## Star History
-
-<a href="https://star-history.com/#jakobdylanc/llmcord&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=jakobdylanc/llmcord&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=jakobdylanc/llmcord&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=jakobdylanc/llmcord&type=Date" />
-  </picture>
-</a>
+- Troubleshooting available in the [issues section](https://github.com/GlemNL/llmcord/issues)
+- Only OpenAI and xAI APIs currently support user identity awareness
+- Contributions welcome!

@@ -6,4 +6,4 @@ services:
     volumes:
       - ./:/app:ro
       - ./data:/app/data:rw
-    container_name: llmcord-prod
+    container_name: llmcord-dev

@@ -5,8 +5,8 @@ from typing import List, Dict, Any, Optional, Tuple
 import discord
 import httpx
 
-from config import Config
-from models import MsgNode, ConversationWarnings
+from config.config import Config
+from app.models import MsgNode, ConversationWarnings
 
 
 async def extract_message_content(msg: discord.Message, msg_node: MsgNode, httpx_client: httpx.AsyncClient, config: Config) -> Tuple[str, List[Dict[str, Any]], bool]:
