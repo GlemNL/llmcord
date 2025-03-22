@@ -173,6 +173,9 @@ class TestLLMCordClient:
             # Mock db.reset_user_history to return True
             discord_client.db.reset_user_history = AsyncMock(return_value=True)
             
+            # Make sure reply is properly awaited when called
+            mock_discord_message.reply = AsyncMock()
+            
             with patch.object(discord_client, 'process_message_chain', new_callable=AsyncMock) as mock_process:
                 # Execute
                 await discord_client.on_message(mock_discord_message)
@@ -181,6 +184,9 @@ class TestLLMCordClient:
                 discord_client.db.reset_user_history.assert_called_once_with(mock_discord_message.author.id)
                 mock_discord_message.reply.assert_called_once_with("Your conversation history has been reset. Starting fresh!")
                 mock_process.assert_not_called()
+                
+                # Ensure mock_discord_message.reply was properly awaited
+                assert mock_discord_message.reply.await_count == 1
     
     @pytest.mark.asyncio
     async def test_on_message_stats_command(self, discord_client, mock_discord_message):

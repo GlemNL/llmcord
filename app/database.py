@@ -3,6 +3,18 @@ import logging
 from datetime import datetime
 from typing import List, Dict, Optional, Any
 
+# Add this function at the top of the file
+def adapt_datetime(val):
+    """Convert datetime to ISO format string with timezone for SQLite."""
+    return val.isoformat()
+
+def convert_datetime(val):
+    """Convert ISO format string from SQLite back to datetime."""
+    try:
+        return datetime.fromisoformat(val.decode())
+    except ValueError:
+        return datetime.fromisoformat(val.decode().replace('Z', '+00:00'))
+
 class Database:
     """
     Handles storage and retrieval of message history for the bot.
@@ -10,6 +22,11 @@ class Database:
     """
     def __init__(self, db_path: str = "data/message_history.db"):
         self.db_path = db_path
+        
+        # Register adapters for datetime objects
+        sqlite3.register_adapter(datetime, adapt_datetime)
+        sqlite3.register_converter("timestamp", convert_datetime)
+        
         self._create_tables()
         
     def _create_tables(self):
