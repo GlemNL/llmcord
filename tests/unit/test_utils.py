@@ -1,17 +1,13 @@
-import pytest
-from unittest.mock import MagicMock, AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock
+
 import discord
 import httpx
-import base64
+import pytest
 
-from app.utils import (
-    extract_message_content,
-    find_parent_message,
-    check_permissions,
-    create_embed_for_warnings,
-    truncate_messages,
-)
-from app.models import MsgNode, ConversationWarnings
+from app.models import ConversationWarnings, MsgNode
+from app.utils import (check_permissions, create_embed_for_warnings,
+                       extract_message_content, find_parent_message,
+                       truncate_messages)
 
 
 class TestExtractMessageContent:

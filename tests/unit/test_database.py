@@ -1,8 +1,4 @@
-import os
 import sqlite3
-import pytest
-from datetime import datetime
-from unittest.mock import patch
 
 from app.database import Database
 

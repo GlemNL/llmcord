@@ -1,7 +1,6 @@
-import os
-import yaml
+from unittest.mock import mock_open, patch
+
 import pytest
-from unittest.mock import patch, mock_open
 
 from config.config import Config
 

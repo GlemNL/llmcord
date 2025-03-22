@@ -1,10 +1,8 @@
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-import discord
-from discord import app_commands
 from datetime import datetime
+from unittest.mock import AsyncMock, MagicMock
 
-from app.discord_client import LLMCordClient
+import discord
+import pytest
 
 
 class TestSlashCommands:

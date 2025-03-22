@@ -1,19 +1,15 @@
-import os
-import pytest
-import sqlite3
-import yaml
 import asyncio
-from unittest.mock import MagicMock, AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import discord
 import httpx
+import pytest
 
-from config.config import Config
 from app.database import Database
-from app.message_store import MessageStore
-from app.llm_client import LLMClient
-from app.models import MsgNode, ConversationWarnings
 from app.discord_client import LLMCordClient
+from app.llm_client import LLMClient
+from app.message_store import MessageStore
+from config.config import Config
 
 
 @pytest.fixture

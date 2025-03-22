@@ -1,11 +1,9 @@
-import pytest
-from unittest.mock import MagicMock, AsyncMock, patch
-import discord
-import asyncio
+from unittest.mock import AsyncMock, MagicMock, patch
 
-from app.discord_client import LLMCordClient
+import discord
+import pytest
+
 from app.models import ConversationWarnings
-from app.message_store import MessageStore
 
 
 class TestSendLLMResponse:

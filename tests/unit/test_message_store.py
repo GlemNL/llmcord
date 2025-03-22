@@ -1,8 +1,9 @@
+from unittest.mock import MagicMock
+
 import pytest
-from unittest.mock import MagicMock, patch, AsyncMock
 
 from app.message_store import MessageStore
-from app.models import MsgNode, ConversationWarnings
+from app.models import ConversationWarnings, MsgNode
 
 
 class TestMessageStore:

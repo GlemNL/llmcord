@@ -2,9 +2,9 @@ import asyncio
 import logging
 import os
 
-from config.config import Config
-from app.discord_client import LLMCordClient
 from app.database import Database
+from app.discord_client import LLMCordClient
+from config.config import Config
 
 
 async def main():

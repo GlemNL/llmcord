@@ -1,10 +1,9 @@
-import pytest
-from unittest.mock import MagicMock, patch, AsyncMock
+from unittest.mock import AsyncMock, patch
 
+import pytest
 from openai import AsyncOpenAI
-from openai.types.chat import ChatCompletion, ChatCompletionMessage, ChatCompletionChunk
+from openai.types.chat import ChatCompletionChunk
 from openai.types.chat.chat_completion_chunk import Choice, ChoiceDelta
-from app.models import ConversationWarnings
 
 from app.llm_client import LLMClient
 

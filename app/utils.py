@@ -1,12 +1,12 @@
 import logging
 from base64 import b64encode
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import discord
 import httpx
 
+from app.models import ConversationWarnings, MsgNode
 from config.config import Config
-from app.models import MsgNode, ConversationWarnings
 
 
 async def extract_message_content(

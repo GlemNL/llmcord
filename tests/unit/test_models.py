@@ -1,8 +1,9 @@
-import pytest
 import asyncio
 from unittest.mock import MagicMock
 
-from app.models import MsgNode, ConversationWarnings
+import pytest
+
+from app.models import ConversationWarnings, MsgNode
 
 
 class TestMsgNode:
