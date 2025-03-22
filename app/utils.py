@@ -188,6 +188,7 @@ def truncate_messages(messages: List[Dict[str, Any]], max_length: int) -> List[s
     for message in messages:
         content = message.get("content", "")
         if isinstance(content, str):
+            content = str(content)
             if len(current_chunk) + len(content) > max_length:
                 # Need to start a new chunk
                 if current_chunk:
@@ -201,8 +202,10 @@ def truncate_messages(messages: List[Dict[str, Any]], max_length: int) -> List[s
                 current_chunk = content
             else:
                 current_chunk += content
+        else:
+            current_chunk += ""
         
-    if current_chunk:
+    if current_chunk or current_chunk == "":
         chunks.append(current_chunk)
         
     return chunks

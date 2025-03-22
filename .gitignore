@@ -20,6 +20,7 @@ wheels/
 .installed.cfg
 *.egg
 .python-version
+*.ipynb
 
 # Virtual Environment
 venv/

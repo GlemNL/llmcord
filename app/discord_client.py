@@ -1,7 +1,7 @@
 import asyncio
 import logging
 from datetime import datetime
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Tuple
 
 import discord
 import httpx
@@ -9,7 +9,7 @@ import httpx
 from config.config import Config
 from app.llm_client import LLMClient
 from app.message_store import MessageStore
-from app.database import Database  # Import the new database module
+from app.database import Database
 from app.models import MsgNode, ConversationWarnings
 from app.utils import (
     extract_message_content, 
@@ -74,7 +74,7 @@ class LLMCordClient(discord.Client):
             return
         
         # Check for reset command
-        if "reset" in message.content and self.user.mentioned_in(message):
+        if "$reset" in message.content: # and self.user.mentioned_in(message):
             success = self.db.reset_user_history(message.author.id)
             if success:
                 await message.reply("Your conversation history has been reset. Starting fresh!")
@@ -83,7 +83,7 @@ class LLMCordClient(discord.Client):
             return
             
         # Check for stats command
-        if "stats" in message.content and self.user.mentioned_in(message):
+        if "$stats" in message.content: # and self.user.mentioned_in(message):
             stats = self.db.get_user_stats(message.author.id)
             if stats:
                 await message.reply(stats)
@@ -136,8 +136,14 @@ class LLMCordClient(discord.Client):
         
         # Check if we should include message history
         include_history = True
-        if self.user.mentioned_in(start_msg) and not start_msg.reference:
-            # If the bot is directly mentioned without a reply, we start a new conversation
+        is_dm = start_msg.channel.type == discord.ChannelType.private
+        
+        # Start a new conversation when:
+        # 1. In a server: bot is directly mentioned without a reply
+        # 2. In DMs: message doesn't have a reference (not a reply)
+        if (not is_dm and self.user.mentioned_in(start_msg) and not start_msg.reference) or \
+           (is_dm and not start_msg.reference):
+            # If condition met, we start a new conversation
             include_history = False
         
         # First, process the immediate message chain
