@@ -11,6 +11,7 @@ class MsgNode:
     Represents a message in the conversation chain.
     Stores all necessary information about a message for LLM processing.
     """
+
     text: Optional[str] = None
     images: List[Dict[str, Any]] = field(default_factory=list)
 
@@ -29,11 +30,12 @@ class ConversationWarnings:
     """
     Tracks warnings that should be displayed to the user about their conversation.
     """
+
     def __init__(self):
         self.warnings = set()
-        
+
     def add(self, warning: str):
         self.warnings.add(warning)
-        
+
     def get_sorted(self):
         return sorted(self.warnings)

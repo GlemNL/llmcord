@@ -19,7 +19,7 @@ from app.discord_client import LLMCordClient
 @pytest.fixture
 def temp_db_path(tmp_path):
     """Fixture that provides a temporary database path."""
-    db_path = tmp_path / "db.db"
+    db_path = tmp_path / "test_db.db"
     return str(db_path)
 
 
@@ -38,32 +38,27 @@ def test_config():
         "permissions": {
             "users": {"allowed_ids": [111, 222], "blocked_ids": [333]},
             "roles": {"allowed_ids": [444, 555], "blocked_ids": [666]},
-            "channels": {"allowed_ids": [777, 888], "blocked_ids": [999]}
+            "channels": {"allowed_ids": [777, 888], "blocked_ids": [999]},
         },
         "system_prompt": "Test system prompt",
         "providers": {
             "openai": {
                 "base_url": "https://api.openai.com/v1",
-                "api_key": "test_api_key"
+                "api_key": "test_api_key",
             },
-            "ollama": {
-                "base_url": "http://localhost:11434/v1"
-            }
+            "ollama": {"base_url": "http://localhost:11434/v1"},
         },
         "model": "openai/gpt-4o",
-        "extra_api_parameters": {
-            "max_tokens": 2048,
-            "temperature": 0.7
-        }
+        "extra_api_parameters": {"max_tokens": 2048, "temperature": 0.7},
     }
-    
+
     # Create a mock Config object
     mock_config = MagicMock(spec=Config)
-    
+
     # Set attributes on the mock
     for key, value in config_dict.items():
         setattr(mock_config, key, value)
-    
+
     # Set properties that the code accesses via properties
     mock_config.bot_token = config_dict["bot_token"]
     mock_config.client_id = config_dict["client_id"]
@@ -78,11 +73,18 @@ def test_config():
     mock_config.providers = config_dict["providers"]
     mock_config.model = config_dict["model"]
     mock_config.extra_api_parameters = config_dict["extra_api_parameters"]
-    
+
     # Constants
     mock_config.VISION_MODEL_TAGS = (
-        "gpt-4", "claude-3", "gemini", "gemma", "pixtral", 
-        "mistral-small", "llava", "vision", "vl"
+        "gpt-4",
+        "claude-3",
+        "gemini",
+        "gemma",
+        "pixtral",
+        "mistral-small",
+        "llava",
+        "vision",
+        "vl",
     )
     mock_config.PROVIDERS_SUPPORTING_USERNAMES = ("openai", "x-ai")
     mock_config.ALLOWED_FILE_TYPES = ("image", "text")
@@ -91,16 +93,18 @@ def test_config():
     mock_config.STREAMING_INDICATOR = " ⚪"
     mock_config.EDIT_DELAY_SECONDS = 1
     mock_config.MAX_MESSAGE_NODES = 100
-    
+
     # Add the reload method
     mock_config.reload.return_value = config_dict
-    
+
     # Add the get method
-    mock_config.get.side_effect = lambda key, default=None: config_dict.get(key, default)
-    
+    mock_config.get.side_effect = lambda key, default=None: config_dict.get(
+        key, default
+    )
+
     # Add dict-like access
     mock_config.__getitem__.side_effect = lambda key: config_dict[key]
-    
+
     return mock_config
 
 
@@ -143,7 +147,7 @@ def mock_discord_message():
     mock_msg.guild.me.id = 999
     mock_msg.reference = None
     mock_msg.reply = AsyncMock()
-    
+
     return mock_msg
 
 
@@ -158,31 +162,38 @@ def mock_client():
 def event_loop_policy():
     """Return an event loop policy for all tests."""
     return asyncio.DefaultEventLoopPolicy()
-    
-    
+
+
 @pytest.fixture
 def discord_client(test_config):
     """Fixture that provides a test Discord client instance."""
     # Patch discord.Client.__init__ to prevent actual initialization
-    with patch('discord.Client.__init__', return_value=None):
+    with patch("discord.Client.__init__", return_value=None):
         client = LLMCordClient(test_config)
-        
-        # Create a mock for _connection
+
+        # Create mocks for client properties
         client._connection = MagicMock()
-        
+        client.http = MagicMock()  # Add this for app_commands.CommandTree
+
+        # Set up a mock tree - this is now set in setup_hook
+        client.tree = MagicMock()
+
         # Instead of trying to set the user property directly, we'll
         # create a mock user and patch the user property to return it
         mock_user = MagicMock(spec=discord.ClientUser)
         mock_user.id = 999
         mock_user.mention = "<@999>"
-        
+
         # Use property() to mock the user property
         type(client).user = property(lambda self: mock_user)
-        
+
         # Mock http_client, llm_client, message_store, and db
         client.http_client = AsyncMock()
         client.llm_client = AsyncMock()
         client.message_store = MagicMock(spec=MessageStore)
         client.db = AsyncMock()
-        
+
+        # Mock setup_hook to prevent it from being called during tests
+        client.setup_hook = AsyncMock()
+
         return client
