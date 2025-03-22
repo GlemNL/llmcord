@@ -76,7 +76,7 @@ class LLMCordClient(discord.Client):
         # Check for reset command
         if "$reset" in message.content: # and self.user.mentioned_in(message):
             success = self.db.reset_user_history(message.author.id)
-            if success:
+            if bool(success):
                 await message.reply("Your conversation history has been reset. Starting fresh!")
             else:
                 await message.reply("There was an error resetting your conversation history.")
