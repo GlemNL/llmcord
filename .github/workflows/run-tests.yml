@@ -23,15 +23,22 @@ jobs:
         python -m pip install --upgrade pip
         pip install poetry
         poetry config virtualenvs.create false
-        poetry install --no-interaction --no-ansi --no-root
+        poetry install --no-interaction --no-ansi
         
     - name: Create config file
       run: |
         cp config/config-example.yaml config/config.yaml
         
+    - name: Prepare data directory
+      run: |
+        mkdir -p data
+        chmod 777 data
+        
     - name: Run tests
       run: |
-        pytest tests/
+        # Set the database path to a known writable location
+        export DB_PATH="./data/test_database.db"
+        pytest tests/ -v
         
     # - name: Upload test results
     #   uses: actions/upload-artifact@v3
