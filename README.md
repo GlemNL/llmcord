@@ -1,131 +1,184 @@
-# 🤖 LLMcord
+# LLMCord
 
-> **Transform Discord into a collaborative AI playground**
+![Discord Bot Status](https://img.shields.io/badge/discord-bot-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-LLMcord enables seamless interactions with Large Language Models directly in your Discord server. Compatible with virtually any LLM, whether cloud-based or self-hosted.
+**LLMCord** is a powerful, customizable Discord bot that connects your server to various Large Language Models (LLMs). This project is forked from [jakobdylanc/llmcord](https://github.com/jakobdylanc/llmcord).
 
-![LLMcord Banner](https://github.com/jakobdylanc/llmcord/assets/38699060/789d49fe-ef5c-470e-b60e-48ac03057443)
+## Features
 
-## ✨ Key Capabilities
+- 🌈 **Multi-Provider Support**: Connect to OpenAI, Mistral, Groq, X-AI, OpenRouter, Ollama, LM Studio, VLLM, Oobabooga, and Jan AI.
+- 🧠 **Conversation Memory**: Maintains context across messages for natural conversations.
+- 📊 **Conversation Statistics**: Track usage with built-in `/stats` command.
+- 🔄 **Memory Reset**: Start fresh with `/reset` command.
+- 🖼️ **Vision Models**: Support for image understanding with compatible models.
+- 🔒 **Granular Permissions**: Control access by user, role, and channel.
+- 📝 **Custom System Prompts**: Define your bot's personality and behavior.
+- 🔧 **Highly Configurable**: Adjust many parameters to suit your needs.
+- 🚀 **Docker Ready**: Easy deployment with Docker support.
 
-### Dynamic Conversation System
-Interact naturally with AI models through Discord:
-- Mention the bot to initiate a conversation
-- Continue by replying to messages
-- Type `@bot reset` to start fresh
-- Check your usage with `@bot stats`
+## Getting Started
 
-### Flexible Conversation Flow
-- Create multiple conversation branches
-- Join and continue conversations started by others
-- Include any message in context by mentioning the bot while replying
+### Prerequisites
 
-### Additional Interaction Options
-- In DMs: Conversations flow automatically without replies
-- Thread support: Start a thread from any message and mention the bot to continue there
-- Message chaining: Sequential messages from the same user are automatically grouped
+- Python 3.10 or higher
+- A Discord bot token - [Create one here](https://discord.com/developers/applications)
+- API keys for your chosen LLM providers
 
-### LLM Provider Flexibility
+### Installation
 
-**Cloud-based options:**
-- OpenAI API
-- xAI API
-- Mistral API
-- Groq API
-- OpenRouter API
+#### Using Docker (Recommended)
 
-**Self-hosted options:**
-- Ollama
-- LM Studio
-- vLLM
-
-Or any OpenAI-compatible API server of your choice.
-
-### Advanced Features
-- Persistent conversation storage in SQLite
-- Image attachment support with vision-capable models
-- Text file attachment handling
-- Customizable AI personality
-- User identity recognition (OpenAI and xAI APIs)
-- Real-time response streaming
-- Runtime configuration updates
-- Smart warning system
-- Efficient message caching
-- Fully asynchronous operation
-
-## 📁 Repository Structure
-
-```
-llmcord/
-├── app/                    # Core application code
-├── config/                 # Configuration files
-├── data/                   # Data storage
-├── scripts/                # Utility scripts
-├── docker-compose.yaml
-├── Dockerfile
-├── main.py                 # Entry point
-└── requirements.txt
-```
-
-## 🚀 Setup Guide
-
-1. Get the code:
-   ```bash
-   git clone https://github.com/GlemNL/llmcord
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/llmcord.git
+   cd llmcord
    ```
 
-2. Create your configuration file:
-   - Copy "config-example.yaml" to "config.yaml"
-   - Configure the following sections:
+2. Create a configuration file:
+   ```
+   cp config/config-example.yaml config/config.yaml
+   ```
 
-### Discord Configuration
+3. Edit your configuration file:
+   ```
+   nano config/config.yaml
+   ```
 
-| Parameter | Details |
-| --- | --- |
-| **bot_token** | Generate at [discord.com/developers/applications](https://discord.com/developers/applications) (enable "MESSAGE CONTENT INTENT") |
-| **client_id** | Found in "OAuth2" tab |
-| **status_message** | Custom bot status (max 128 characters) |
-| **max_text** | Maximum text length per message (default: 100,000) |
-| **max_images** | Maximum images per message (default: 5) |
-| **max_messages** | Maximum messages per conversation (default: 25) |
-| **use_plain_responses** | Use plaintext instead of embeds (default: false) |
-| **allow_dms** | Enable/disable direct messages (default: true) |
-| **permissions** | Control access for users, roles, and channels |
+4. Run with Docker Compose:
+   ```
+   docker-compose up -d
+   ```
 
-### LLM Configuration
+#### Manual Installation
 
-| Parameter | Details |
-| --- | --- |
-| **providers** | API endpoints and keys for LLM providers |
-| **model** | Format: `<provider>/<model>` (e.g., `openai/gpt-4o`, `ollama/llama3.3`) |
-| **extra_api_parameters** | Additional LLM parameters (default: max_tokens=4096, temperature=1.0) |
-| **system_prompt** | Customize bot behavior (leave empty for default) |
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/llmcord.git
+   cd llmcord
+   ```
 
-3. Launch the bot:
+2. Install dependencies using Poetry:
+   ```
+   pip install poetry
+   poetry install
+   ```
 
-   **Standard method:**
-   ```bash
-   python -m pip install -U -r requirements.txt
+3. Create and edit your configuration:
+   ```
+   cp config/config-example.yaml config/config.yaml
+   ```
+
+4. Run the bot:
+   ```
    python main.py
    ```
 
-   **Docker method:**
-   ```bash
-   # Create persistent storage
-   mkdir -p data
-   
-   # Start with Docker Compose
-   docker compose up
-   ```
+## Configuration
 
-## 🔧 Bot Commands
+The `config/config.yaml` file contains all settings for your bot. Key sections include:
 
-- `@bot reset` - Clear conversation history
-- `@bot stats` - View usage statistics
-- `@bot help` - Display command information
+### Discord Settings
 
-## 📝 Additional Notes
+```yaml
+bot_token: YOUR_BOT_TOKEN
+client_id: YOUR_CLIENT_ID
+status_message: Custom status message for your bot
 
-- Troubleshooting available in the [issues section](https://github.com/GlemNL/llmcord/issues)
-- Only OpenAI and xAI APIs currently support user identity awareness
-- Contributions welcome!
+max_text: 100000
+max_images: 5
+max_messages: 25
+
+use_plain_responses: false
+allow_dms: true
+
+permissions:
+  users:
+    allowed_ids: []
+    blocked_ids: []
+  roles:
+    allowed_ids: []
+    blocked_ids: []
+  channels:
+    allowed_ids: []
+    blocked_ids: []
+```
+
+### LLM Settings
+
+```yaml
+providers:
+  openai:
+    base_url: https://api.openai.com/v1
+    api_key: YOUR_API_KEY
+  # Configure other providers as needed
+
+model: openai/gpt-4o  # Format: provider/model
+
+extra_api_parameters:
+  max_tokens: 4096
+  temperature: 1.0
+
+system_prompt: >
+  Your custom system prompt goes here.
+```
+
+## Usage
+
+Once your bot is running and invited to your server, you can:
+
+1. **Start a conversation**: Mention the bot or send a direct message
+2. **Continue conversations**: Reply to previous messages to maintain context
+3. **View stats**: Use `/stats` to see your usage statistics
+4. **Reset memory**: Use `/reset` to start a fresh conversation
+
+## Bot Responses
+
+The bot supports two response modes:
+
+- **Embedded responses**: Fancy Discord embeds with real-time streaming (default)
+- **Plain text responses**: Set `use_plain_responses: true` in config
+
+## Permissions System
+
+Control who can use the bot with:
+
+- **Allowed/blocked users**: Specific Discord user IDs
+- **Allowed/blocked roles**: Role-based permissions
+- **Allowed/blocked channels**: Limit where the bot can be used
+
+Empty lists with no blocked entries means everyone can use the bot.
+
+## Development
+
+### Project Structure
+
+- `app/`: Core application code
+- `config/`: Configuration files and handler
+- `tests/`: Test suite
+- `main.py`: Entry point
+
+### Running Tests
+
+```
+pytest tests/ -v
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Original project by [jakobdylanc](https://github.com/jakobdylanc/llmcord)
+- Built with [discord.py](https://github.com/Rapptz/discord.py) and [OpenAI's Python client](https://github.com/openai/openai-python)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
